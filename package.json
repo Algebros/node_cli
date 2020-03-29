@@ -1,0 +1,23 @@
+{
+  "name": "node_cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Algebros/node_cli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Algebros/node_cli/issues"
+  },
+  "homepage": "https://github.com/Algebros/node_cli#readme",
+  "dependencies": {
+    "commander": "^5.0.0"
+  }
+}

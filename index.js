@@ -2,6 +2,7 @@ const { program } = require('commander');
 const { pipeline, Transform } = require('stream');
 const path = require('path');
 const fs = require('fs');
+const CONST = require('./constants');
 
 program.storeOptionsAsProperties(false)
 
@@ -37,23 +38,40 @@ function checkAlphabet(str) {
 }
 
 function encryption(char) {
-  const startLowerCase = 97;
-  const endLowerCase = 122;
-  const startUpperCase = 65;
-  const endUpperCase = 90;
+  let charCode = char.charCodeAt();
 
   switch (arg.action) {
     case 'encode':
-      char = char.charCodeAt() + arg.shift;
+        if (isLowCase(charCode)) {
+          charCode = ((charCode - CONST.alphabet.startLowerCase + arg.shift) % CONST.alphabet.alphabetNum) + CONST.alphabet.startLowerCase;
+          
+        } else {
+          charCode = ((charCode - CONST.alphabet.startUpperCase + arg.shift) % CONST.alphabet.alphabetNum) + CONST.alphabet.startUpperCase;
+        }
       break;
     
     case 'decode':
-      char = char.charCodeAt() - arg.shift;
+        if (isLowCase(charCode)) {
+          charCode = CONST.alphabet.endLowerCase - ((CONST.alphabet.endLowerCase - charCode + arg.shift) % CONST.alphabet.alphabetNum);
+          
+        } else {
+          charCode = CONST.alphabet.endUpperCase - ((CONST.alphabet.endUpperCase - charCode + arg.shift) % CONST.alphabet.alphabetNum) ;
+        }
       break;
   
     default:
       break;
   }
 
-  return String.fromCharCode(char);
+  return String.fromCharCode(charCode);
+}
+
+function isLowCase(charCode) {
+  const isAlphabet = (charCode >= CONST.alphabet.startUpperCase) 
+  && (charCode <= CONST.alphabet.endUpperCase)
+  || (charCode >= CONST.alphabet.startLowerCase)
+  && (charCode <= CONST.alphabet.endLowerCase);
+
+  if(isAlphabet) return (charCode >= CONST.alphabet.startLowerCase) && (charCode <= CONST.alphabet.endLowerCase);
+  return false;
 }

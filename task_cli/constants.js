@@ -6,4 +6,4 @@ module.exports = {
     endUpperCase: 90,
     alphabetNum: 26
   }
-}
+};

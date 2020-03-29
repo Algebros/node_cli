@@ -19,7 +19,11 @@ function init(arg) {
       ? fs.createWriteStream(path.join(__dirname, arg.output), 'utf-8')
       : process.stdout,
 
-    err => process.stderr(err)
+    err => {
+      if (err) {
+        console.error('Pipeline failed.', err);
+      }
+    }
   );
 }
 

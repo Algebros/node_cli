@@ -19,7 +19,7 @@ function init(arg) {
       ? fs.createWriteStream(path.join(__dirname, arg.output), 'utf-8')
       : process.stdout,
 
-    err => console.log(err)
+    err => process.stderr(err)
   );
 }
 

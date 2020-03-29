@@ -6,24 +6,22 @@ const fs = require('fs');
 program.storeOptionsAsProperties(false)
 
 program
-  .option('-s, --shift <number>', 'a shift')
+  .option('-s, --shift <number>', 'a shift', parseInt)
   .option('-i, --input <path>', 'an input file')
   .option('-o, --output <path>', 'an output file')
   .option('-a, --action <string>', 'an action encode/decode')
-
-program.parse(process.argv);
+  .parse(process.argv);
 
 const arg = program.opts();
-const pathToFile = path.join(__dirname, arg.input);
 
 pipeline(
   (arg.input) ?
-  fs.createReadStream(pathToFile)
+  fs.createReadStream(path.join(__dirname, arg.input))
   : process.stdin,
 
   new Transform({
     transform(chunk) {
-      this.push(caesarCipher(chunk.toString(), arg.shift, arg.action));
+      this.push( checkAlphabet(chunk) );
     }
   }),
 
@@ -34,15 +32,28 @@ pipeline(
   (err) => console.log(err)
 )
 
-function caesarCipher(str, key, act) {
-  switch (act) {
+function checkAlphabet(str) {
+  return str.toString().replace(/[A-Za-z]/g, (c) => encryption(c));
+}
+
+function encryption(char) {
+  const startLowerCase = 97;
+  const endLowerCase = 122;
+  const startUpperCase = 65;
+  const endUpperCase = 90;
+
+  switch (arg.action) {
     case 'encode':
-      return str.replace(/[A-Za-z]/g, c => String.fromCharCode( c.charCodeAt() + +key ));
+      char = char.charCodeAt() + arg.shift;
+      break;
     
     case 'decode':
-      return str.replace(/[A-Za-z]/g, c => String.fromCharCode( c.charCodeAt() - +key ));
+      char = char.charCodeAt() - arg.shift;
+      break;
   
     default:
       break;
   }
+
+  return String.fromCharCode(char);
 }

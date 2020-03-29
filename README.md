@@ -11,6 +11,7 @@
 Examples:
 
 `node index.js -i text.txt -o encode.txt -s 3 -a encode`
+
 `node index.js --input text.txt --output encode.txt --shift 3 --action encode`
 
 `node index.js -i encode.txt -o decode.txt -s 3 -a encode`

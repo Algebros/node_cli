@@ -10,8 +10,9 @@ function init(arg) {
       : process.stdin,
 
     new Transform({
-      transform(chunk) {
+      transform(chunk, enc, callback) {
         this.push(checkAlphabet(chunk, arg));
+        callback();
       }
     }),
 
